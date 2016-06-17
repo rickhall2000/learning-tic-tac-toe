@@ -1,6 +1,5 @@
 (ns learning-tic-tac-toe.core
-  (:require [clojure.spec :as s]
-            [clojure.spec.gen :as gen]))
+  (:require [clojure.spec :as s]))
 
 (def move? #{"O" "X"})
 

@@ -2,22 +2,20 @@
   (:require [clojure.test :refer :all]
             [learning-tic-tac-toe.core :refer :all]
             [clojure.spec :as s]
-            [clojure.spec.gen :as gen]
-            [clojure.test.check :as tc]
             [clojure.test.check.clojure-test :refer [defspec]]
             [clojure.test.check.properties :as prop]))
 
 (defspec winning-line-returns-true-when-three-squares-match 
   100
-  (prop/for-all [v (s/gen :learning-tic-tac-toe.core/line)]
-                (= (= 3 (max (count (filter #(= "X" %) v))
-                             (count (filter #(= "O" %) v)))) 
-                   (winning-line? v))))
+  (prop/for-all [line (s/gen :learning-tic-tac-toe.core/line)]
+                (= (= 3 (max (count (filter #(= "X" %) line))
+                             (count (filter #(= "O" %) line))))
+                   (winning-line? line))))
 
 (defspec detect-winners 
   100
-  (prop/for-all [v (s/gen :learning-tic-tac-toe.core/board)]
-                (let [cell (partial nth v)
+  (prop/for-all [board (s/gen :learning-tic-tac-toe.core/board)]
+                (let [cell (partial nth board)
                       top [(cell 0) (cell 1) (cell 2)]
                       mid [(cell 3) (cell 4) (cell 5)]
                       bot [(cell 6) (cell 7) (cell 8)]
@@ -35,4 +33,4 @@
                              (winning-line? rite)
                              (winning-line? diag1)
                              (winning-line? diag2)))
-                     (true? (winner? v))))))
+                     (true? (winner? board))))))
