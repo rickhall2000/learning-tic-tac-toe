@@ -1,5 +1,6 @@
 (ns learning-tic-tac-toe.core
-  (:require [clojure.spec :as s]))
+  (:require [clojure.spec :as s]
+            [clojure.spec.test :as test]))
 
 (def move? #{"O" "X"})
 
@@ -15,9 +16,17 @@
                      [2 4 6] [0 3 6] [1 4 7] [2 5 8]])
 
 (defn winning-line? 
+  "Does this set of values indicate a win"
    [line]
    (or (every? #(= "X" %) line) 
        (every? #(= "O" %) line)))
+
+(s/fdef winning-line?
+        :args (s/cat :line ::line)
+        :ret boolean? 
+        :fn #(= (:ret %)
+                (and (apply = (-> % :args :line))
+                     (not (= ["" "" ""] (-> % :args :line))))))
 
 (defn all-lines
   [board]
